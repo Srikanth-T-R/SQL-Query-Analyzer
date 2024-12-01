@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Query Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .examples {
+            margin-top: 20px;
+        }
+        .example-btn {
+            margin: 5px 0;
+            padding: 8px 12px;
+            cursor: pointer;
+            background-color: #ffff6d;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .example-btn:hover {
+            background-color: #ddd;
+        }
+    </style>
+    <script>
+        function setExample(query) {
+            document.getElementById('query').value = query;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>SQL Query Analyzer</h1>
+        <p>Analyze SQL queries for potential performance and security issues. Use the examples below to get started!</p>
+        
+        <form method="POST">
+            <textarea id="query" name="query" placeholder="Enter your SQL query here...">{{ query }}</textarea>
+            <button type="submit">Analyze Query</button>
+        </form>
+
+        <div class="examples">
+            <h3>Example Queries</h3>
+            <button class="example-btn" onclick="setExample('SELECT * FROM employees;')">Simple SELECT Query</button>
+            <button class="example-btn" onclick="setExample('WITH RECURSIVE count_cte AS (SELECT 1 AS value UNION ALL SELECT value + 1 FROM count_cte WHERE value < 10) SELECT * FROM count_cte;')">Recursive CTE</button>
+            <button class="example-btn" onclick="setExample('SELECT * FROM table1, table2;')">Cartesian Product</button>
+            <button class="example-btn" onclick="setExample('SELECT * FROM (SELECT * FROM employees);')">Nested Subquery</button>
+        </div>
+
+        {% if query %}
+            <h3>Query Analysis</h3>
+            <pre>{{ query }}</pre>
+            {% if warnings %}
+                <h4>Warnings:</h4>
+                <ul>
+                    {% for warning in warnings %}
+                        <li>{{ warning }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No warnings detected.</p>
+            {% endif %}
+
+            {% if execution_result %}
+                <h4>Execution Result:</h4>
+                <pre>{{ execution_result }}</pre>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>
